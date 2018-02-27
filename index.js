@@ -6,10 +6,11 @@ const mysql = require("mysql");
 const pg = require("pg");
 const msg = require("./utilities/message.js");
 const user = require("./utilities/user.js");
+const secret = require("./secret.json");
 const Embed = require("./structures/embed.js");
 const pool = new pg.Pool({
   user: "stipendi",
-  password: "squeuel",
+  password: secret.dbpassword,
   database: "treedb"
 });
 const similarity = require("string-similarity");
@@ -81,7 +82,7 @@ class Tree {
     if (info) this.waitingForMessage[channel][user].info = info;
   }
 }
-const tree = new Tree(config.token);
+const tree = new Tree(secret.token);
 module.exports.tree = tree;
 
 tree.client.on("ready", () => {
