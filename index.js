@@ -120,7 +120,7 @@ tree.client.on("messageCreate", async message => {
   }
   let args = message.content.split(/\s+/);
   let command = args.shift().toLowerCase();
-  let requiredCommand = tree.commands.find(command => command.help.name.toLowerCase() === command || command.help.aliases.map(alias => alias.toLowerCase()).indexOf(command) >= 0);
+  let requiredCommand = tree.commands.find(cmd => cmd.help.name.toLowerCase() === command || cmd.help.aliases.map(alias => alias.toLowerCase()).indexOf(command) >= 0);
   if (!requiredCommand) {
     if (!message.channel.guild) {
       let embed = new Embed(null, "\` " + command + "\` is not a recognized command! Type \`" + prefix + "help\` for help!");
