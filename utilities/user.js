@@ -81,7 +81,6 @@ module.exports = new class user {
         return new this.userOutput(null, 0, false, "Unknown error.");
       }
     }else if (type === "combined") {
-      console.log("it's combined no doubt");
       let name = user.split("#");
       let people = users.filter(user => string.similarity(name[1], user.discriminator) >= 0.25);
       if (!people.length) return new this.userOutput(null, 0, false, "User with that discrim wasn't found.");
@@ -104,9 +103,9 @@ module.exports = new class user {
         return new this.userOutput(null, 0, false, "Unknown error.");
       }
     }else if (type === "mention") {
-      let user = users.get(user.trim().replace(/[^\d]/g, ""));
-      if (user) {
-        return new this.userOutput(user, 1, true);
+      let u = users.get(user.trim().replace(/[^\d]/g, ""));
+      if (u) {
+        return new this.userOutput(u, 1, true);
       }else{
         return new this.userOutput(null, 0, false, "Invalid mention.");
       }
