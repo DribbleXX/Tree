@@ -1,8 +1,6 @@
-// lol
 const Eris = require("eris");
 const config = require("./config.json");
 const fs = require("fs");
-const mysql = require("mysql");
 const pg = require("pg");
 const msg = require("./utilities/message.js");
 const user = require("./utilities/user.js");
@@ -151,12 +149,13 @@ tree.client.on("messageCreate", async message => {
     msg.delete(message);
     return msg.dm(message.author.id, "You don't have have the required `" + requiredCommand.help.permission + "` permission to use the `" + requiredCommand.help.name + "` command in `" + message.channel.guild.name + "`!");
   }
-  let restrictedCommands = (await tree.getGuildData(message.channel.guild.id, "disabled_commands")).disabled_commands;
+  let restrictedCommands;
+  if (!message.channel.type) restrictedCommands = (await tree.getGuildData(message.channel.guild.id, "disabled_commands")).disabled_commands;
   if (!message.channel.type && !message.member.permission.has("administrator") && restrictedCommands.filter(command => command.split("|")[1] === message.channel.id).map(command => command.split("|")[0]).indexOf(requiredCommand.help.name) >= 0) {
     msg.delete(message);
     return msg.dm(message.author.id, new Embed("Error!", "\`" + requiredCommand.help.name + "\`" + " has been disabled on that channel by the server administrators."));
   }
-  if (message.channel.guild && requiredCommand.help.requiredPermissions) {
+  if (!message.channel.type && requiredCommand.help.requiredPermissions) {
     let permission = message.channel.permissionsOf(tree.client.user.id);
     let missingPerms = requiredCommand.help.requiredPermissions.filter(requiredPerm => !permission.has(requiredPerm));
     if (missingPerms.length === 1) {
