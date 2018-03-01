@@ -7,9 +7,9 @@ const user = require("./utilities/user.js");
 const secret = require("./secret.json");
 const Embed = require("./structures/embed.js");
 const pool = new pg.Pool({
-  user: "stipendi",
-  password: secret.dbpassword,
-  database: "treedb"
+  user: "postgres", //postgres role
+  password: secret.dbpassword, //postgres role password
+  database: "treedb" //database
 });
 const similarity = require("string-similarity");
 class Tree {
@@ -89,12 +89,8 @@ tree.client.on("ready", () => {
     jsFiles.forEach((file, index) => {
       let requiredFile = require(`./commands/${file}`);
       if (requiredFile.help && requiredFile.help.name && requiredFile.run) {
-        tree.commands.set(requiredFile.help.
-          name, requiredFile);
+        tree.commands.set(requiredFile.help.name, requiredFile);
         console.log(`[${index + 1}] Successfully loaded command ${requiredFile.help.name}!`);
-        if (requiredFile.help.aliases) requiredFile.help.aliases.forEach(value => {
-          tree.commandAliases.set(value, requiredFile.help.name);
-        });
       }
     });
   });
@@ -124,11 +120,8 @@ tree.client.on("messageCreate", async message => {
   }
   let args = message.content.split(/\s+/);
   let command = args.shift().toLowerCase();
-  if (tree.commandAliases.get(command)) command = tree.commandAliases.get(command);
-  let requiredCommand;
-  if (tree.commands.get(command)) {
-    requiredCommand = tree.commands.get(command);
-  }else{
+  let requiredCommand = tree.commands.find(command => command.help.name.toLowerCase() === command || command.help.aliases.map(alias => alias.toLowerCase()).indexOf(command) >= 0);
+  if (!requiredCommand) {
     if (!message.channel.guild) {
       let embed = new Embed(null, "\` " + command + "\` is not a recognized command! Type \`" + prefix + "help\` for help!");
       if (command.startsWith(prefix)) embed.addFooter("Remember that you can't put the prefix when doing a command in DMs!");
