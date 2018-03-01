@@ -84,7 +84,7 @@ const tree = new Tree(secret.token);
 module.exports.tree = tree;
 
 tree.client.on("ready", () => {
-  fs.readdir("./commands/", (err, files) => {
+  fs.readdir("./Tree/commands/", (err, files) => {
     let jsFiles = files.filter(file => file.split(".").pop() === "js");
     jsFiles.forEach((file, index) => {
       let requiredFile = require(`./commands/${file}`);
