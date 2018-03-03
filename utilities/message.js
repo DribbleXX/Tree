@@ -13,11 +13,11 @@ module.exports = new class message {
   }
   create(content, channel) {
     if (!content || !channel) return;
+    if (!channel.createMessage) return;
     let embedToSend;
     if (content.embed) embedToSend = content.embed;
     if (content.description || content.title) embedToSend = content;
     if (embedToSend) {
-      console.log(1);
       if (channel.type === 1 || channel.permissionsOf(index.tree.client.user.id).has("embedLinks")) {
         channel.createMessage({ embed: embedToSend });
       }else{
@@ -32,7 +32,6 @@ module.exports = new class message {
         channel.createMessage(message);
       }
     }else{
-      console.log(2);
       channel.createMessage({ embed: new Embed(null, content) });
     }
   }

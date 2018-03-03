@@ -26,7 +26,7 @@ module.exports = new class string {
     if (!all) {
       return string.charAt(0).toUpperCase() + string.slice(1);
     }else{
-      return string.split(/\s+/).map(word => word.charAt(0).toUpperCase() + word.slice(1));
+      return string.split(/\s+/).map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(" ");
     }
   }
   startsWithVowel(string) {

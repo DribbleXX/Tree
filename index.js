@@ -19,6 +19,7 @@ class Tree {
     this.commandAliases = new Eris.Collection();
     this.pool = pool;
     this.waitingForMessage = {};
+    this.games = new Eris.Collection();
   }
   async getGuildData(id, columns = "*") {
     let result = await pool.query("SELECT " + columns + " FROM guilds WHERE id = $1", [id]);
@@ -79,6 +80,9 @@ class Tree {
     }
     if (info) this.waitingForMessage[channel][user].info = info;
   }
+  async getPrefix(guildid) {
+    return (await this.getGuildData(guildid, "prefix")).prefix;
+  }
 }
 const tree = new Tree(secret.token);
 module.exports.tree = tree;
@@ -101,6 +105,39 @@ tree.client.on("ready", () => {
 
 tree.client.on("messageCreate", async message => {
   if (!message || !message.author || message.author.bot) return;
+  if (!tree.games.get(message.channel.id))
+    tree.games.set(message.channel.id, []);
+  let games = tree.games.get(message.channel.id);
+  if (games.length) { //all the game logic goes here
+    let tictactoe = games.filter(game => game.name === "tic tac toe" && game.state)[0];
+    if (tictactoe) { //tic tac toe logic
+      if (tictactoe.players.filter(player => player.id === message.author.id)[0]) { //if the message sender is playing tic tac toe
+        if (message.content.replace(/[ABC][1-3]/i, "").length === 0) {
+          if (tictactoe.turn.id === message.author.id) { //if it's his turn
+            let indexes = message.content.replace(/A/i, "1").replace(/B/i, "2").replace(/C/i, "3");
+            indexes = indexes.split("").map(i => i - 1);
+            if (tictactoe.grid[indexes[1]][indexes[0]] !== "_") {
+              msg.create("Illegal move! There's already an `" + tictactoe.grid[indexes[1]][indexes[0]] + "` there.", message.channel);
+            }else{
+              let grid = tictactoe.grid;
+              grid[indexes[1]][indexes[0]] = tictactoe.players.filter(p => p.id === message.author.id)[0].side.toUpperCase();
+              if (grid.every(row => row[0] !== "_" && row[1] !== "_" && row[2] !== "_"))
+                return tictactoe.draw();
+              if (grid[indexes[1]][0] !== "_" && grid[indexes[1]][0] === grid[indexes[1]][1] && grid[indexes[1]][0] === grid[indexes[1]][2])
+                return tictactoe.win(grid[indexes[1][0]]);
+              if (grid[0][indexes[0]] !== "_" && grid[0][indexes[0]] === grid[1][indexes[0]] && grid[0][indexes[0]] === grid[2][indexes[0]])
+                return tictactoe.win(grid[0][indexes[0]]);
+              if ((grid[1][1] !== "_" && grid[1][1] === grid[0][0] && grid[1][1] === grid[2][2]) || grid[1][1] !== "_" && grid[1][1] === grid[2][0] && grid[1][1] === grid[0][2])
+                return tictactoe.win(grid[1][1]);
+              tictactoe.send();
+            }
+          }else{
+            msg.create("It's not your turn, " + user.discrim(message.author) + "!", message.channel);
+          }
+        }
+      }
+    }
+  }
   let prefix = "";
   if (tree.waitingForMessage[message.channel.id] && tree.waitingForMessage[message.channel.id][message.author.id]) {
     tree.waitingForMessage[message.channel.id][message.author.id].callback(message, tree.waitingForMessage[message.channel.id][message.author.id].info);
