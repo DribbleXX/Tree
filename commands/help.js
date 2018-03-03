@@ -28,8 +28,10 @@ module.exports.run = async (message, args) => {
       embedMessage.embed.addField(string.capitalize(category), commands.join(", "));
     });
     msg.dm(message.author.id, embedMessage);
-  }else if (index.tree.commands.get(args[0])) {
+  }else{
     let command = index.tree.commands.find(command => command.help.name.toLowerCase() === args[0].toLowerCase() || command.help.aliases.map(alias => alias.toLowerCase()).indexOf(args[0].toLowerCase()) >= 0);
+    if (!command)
+      return msg.create("`" + args[0] + "` is not a recognized command! Type `" + prefix + "help` to see a list of every command!", message.channel);
     let embedMessage = {
       embed: new Embed(string.capitalize(command.help.name), command.help.description)
     }
@@ -43,15 +45,13 @@ module.exports.run = async (message, args) => {
     }
     if (message.channel.guild) embedMessage.embed.addFooter("Help command requested by " + message.author.username);
     msg.create(embedMessage, message.channel);
-  }else{
-    msg.dm(message.author.id, "Unknown command! Type \`help\` to see a list of all the commands!");
   }
 };
 
 module.exports.help = {
   name: "help",
   description: "DMs you the list of every command or get help on a specific command!",
-  usage: ["help [command]"],
+  usage: ["help {command}"],
   category: "informative",
   aliases: ["hp"],
   casesensitive: false,
