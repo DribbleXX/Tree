@@ -11,7 +11,7 @@ module.exports = class Tictactoe extends Game {
     this.grid = [["_", "_", "_"], ["_", "_", "_"], ["_", "_", "_"]];
     this.lastMessage = null;
   }
-  async send(lastPlay) {
+  async send() {
     if (!this.turn) {
       let start = this.players[~~(Math.random() * this.players.length)];
       this.turn = start;
