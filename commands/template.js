@@ -2,6 +2,7 @@ const config = require("../config.json");
 const index = require("../index.js");
 const msg = require("../utilities/message.js");
 const user = require("../utilities/user.js");
+const Embed = require("../structures/embed.js");
 module.exports.run = (message, args, prefix) => {
 
 };
