@@ -8,10 +8,7 @@ module.exports = new class message {
       return this.create(message, channel);
     }
   }
-  tag(user) {
-		return user.username + "#" + user.discriminator;
-  }
-  create(content, channel) {
+  async create(content, channel) {
     if (!content || !channel) return;
     if (!channel.createMessage) return;
     let embedToSend;
@@ -19,7 +16,7 @@ module.exports = new class message {
     if (content.description || content.title) embedToSend = content;
     if (embedToSend) {
       if (channel.type === 1 || channel.permissionsOf(index.tree.client.user.id).has("embedLinks")) {
-        channel.createMessage({ embed: embedToSend });
+        return await channel.createMessage({ embed: embedToSend });
       }else{
         let message = "__**" + embedToSend.title + "**__";
         if (embededToSend.description) message = message + "\n" + embedToSend.description;
@@ -29,14 +26,13 @@ module.exports = new class message {
             message = message + "\n" + embedToSend.fields[i].value;
           }
         }
-        channel.createMessage(message);
+        return await channel.createMessage(message);
       }
     }else{
-      channel.createMessage({ embed: new Embed(null, content) });
+      return await channel.createMessage({ embed: new Embed(null, content) });
     }
   }
-  delete(message) {
-    //this is where I would check if the message object is legit or not but tbh I'm lazy and it's not like I'd input an invalid message object anyway
+  async delete(message) {
     if (message.channel.guild && message.channel.permissionsOf(index.tree.client.user.id).has("manageMessages")) {
       message.delete();
     }

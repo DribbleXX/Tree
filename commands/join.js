@@ -20,7 +20,6 @@ module.exports.run = (message, args, prefix) => {
     if (game.players.length === game.maxPlayers) {
       game.state = 1;
       game.start();
-      msg.create(new Embed("Good luck!", "A game of **" + string.capitalize(game.name, true) + "** has started on this channel!\n**Players:** " + game.players.map(p => user.discrim(p)).join(", ")), message.channel);
     }else{
       msg.create(user.discrim(message.author) + " joined " + string.capitalize(game.name, true) + ".", message.channel);
     }

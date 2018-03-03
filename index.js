@@ -119,12 +119,13 @@ tree.client.on("messageCreate", async message => {
             if (tictactoe.grid[indexes[1]][indexes[0]] !== "_") {
               msg.create("Illegal move! There's already an `" + tictactoe.grid[indexes[1]][indexes[0]] + "` there.", message.channel);
             }else{
+              await msg.delete(message);
               let grid = tictactoe.grid;
               grid[indexes[1]][indexes[0]] = tictactoe.players.filter(p => p.id === message.author.id)[0].side.toUpperCase();
               if (grid.every(row => row[0] !== "_" && row[1] !== "_" && row[2] !== "_"))
                 return tictactoe.draw();
               if (grid[indexes[1]][0] !== "_" && grid[indexes[1]][0] === grid[indexes[1]][1] && grid[indexes[1]][0] === grid[indexes[1]][2])
-                return tictactoe.win(grid[indexes[1][0]]);
+                return tictactoe.win(grid[indexes[1]][0]);
               if (grid[0][indexes[0]] !== "_" && grid[0][indexes[0]] === grid[1][indexes[0]] && grid[0][indexes[0]] === grid[2][indexes[0]])
                 return tictactoe.win(grid[0][indexes[0]]);
               if ((grid[1][1] !== "_" && grid[1][1] === grid[0][0] && grid[1][1] === grid[2][2]) || grid[1][1] !== "_" && grid[1][1] === grid[2][0] && grid[1][1] === grid[0][2])
