@@ -12,7 +12,7 @@ module.exports.run = async (message, args) => {
   }
   if (!args[0]) {
     let embedMessage = {
-      embed: new Embed("All Commands in Tree", "Type \`" + prefix + "help <command>\` to get more info about a specific command. You don't need to use the prefix when using commands in DMs with the bot!")
+      embed: new Embed("All Commands in Tree", "Type \`" + prefix.replace(/`/g, "") + "help <command>\` to get more info about a specific command. You don't need to use the prefix when using commands in DMs with the bot!")
     };
     let commands = new Map();
     index.tree.commands.forEach((value, key) => {
@@ -31,7 +31,7 @@ module.exports.run = async (message, args) => {
   }else{
     let command = index.tree.commands.find(command => command.help.name.toLowerCase() === args[0].toLowerCase() || command.help.aliases.map(alias => alias.toLowerCase()).indexOf(args[0].toLowerCase()) >= 0);
     if (!command)
-      return msg.create("`" + args[0] + "` is not a recognized command! Type `" + prefix + "help` to see a list of every command!", message.channel);
+      return msg.create("`" + args[0].replace(/`/g, "") + "` is not a recognized command! Type `" + prefix.replace(/`/g, "") + "help` to see a list of every command!", message.channel);
     let embedMessage = {
       embed: new Embed(string.capitalize(command.help.name), command.help.description)
     }
@@ -43,7 +43,7 @@ module.exports.run = async (message, args) => {
       command.help.permission ? extrainfo.push("Required permission: **" + command.help.permission + "**") : extrainfo.push("Required permission: **requires no extra permissions**");
       if (extrainfo[0]) embedMessage.embed.addField("Extra info", extrainfo.join("\n"));
     }
-    if (message.channel.guild) embedMessage.embed.addFooter("Help command requested by " + message.author.username);
+    if (message.channel.guild) embedMessage.embed.addFooter("Help command requested by " + string.escape(message.author.username));
     msg.create(embedMessage, message.channel);
   }
 };
