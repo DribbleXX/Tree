@@ -5,9 +5,13 @@ const msg = require("../utilities/message.js");
 module.exports.run = async (message, args) => {
   if (!args[0]) return msg.create("I beg your pardon?", message.channel);
   if (args[0].toLowerCase() === "enable" && !args[1]) {
+    if ((await index.tree.getGuildUserData(message.author.id, message.channel.guild.id, "summon")).summon)
+      return msg.create("You already have summoning enabled, " + message.author.username + "!", message.channel);
     index.tree.alterGuildUserData(message.author.id, message.channel.guild.id, "summon", "TRUE");
     return msg.create("You have successfully enabled your summoning, " + message.author.username + "!", message.channel);
   }else if (args[0].toLowerCase() === "disable" && !args[1]) {
+    if (!(await index.tree.getGuildUserData(message.author.id, message.channel.guild.id, "summon")).summon)
+      return msg.create("Your summoning is already disabled, " + message.author.username + "!", message.channel);
     index.tree.alterGuildUserData(message.author.id, message.channel.guild.id, "summon", "FALSE");
     return msg.create("You have successfully disabled your summoning, " + message.author.username + "!", message.channel);
   }
