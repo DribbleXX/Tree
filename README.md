@@ -10,10 +10,11 @@ Tree was made using a Discord API library called Eris. It also utilizes a databa
 ## Features
 - A random number generator!
 - A way to disallow the use of certain commands in a channel!
-- Lockpicker, a game where you pick locks by solving challenges to advance!
+- **Games** like *lock picker* and *tic tac toe*
 - Guild-specific prefixes that guild administrators can change!
+- Lots of fun tiny commands such as `could`!
 
 ... and much, much more to come!
 
 ## Can I have Tree on my server?
-Tree is currently not publicly distributed because it's under heavy development and is missing lots of key features. I plan to make it a public bot at some point, though, so check back soon!
+**Yes!** I'd love it if you added Tree to your server! You can do so by clicking [here.](https://discordapp.com/oauth2/authorize?client_id=363293460809121813&scope=bot&permissions=0)
