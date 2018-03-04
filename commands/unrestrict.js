@@ -31,7 +31,7 @@ module.exports.help = {
   name: "unrestrict",
   description: "Removes a restriction on a command meaning it can be used on that channel again. If channel is omitted it's assumed to be the channel the message was sent in.",
   usage: ["unrestrict <command>", "unrestrict <command> <channel>"],
-  category: "",
+  category: "control",
   aliases: [],
   casesensitive: false,
   channel: ["server"],

@@ -30,7 +30,7 @@ module.exports.help = {
   name: "join",
   description: "Allows you to join various multiplayer games! Supply the game name to reliably join a specific game.",
   usage: ["join { game }"],
-  category: "",
+  category: "games",
   aliases: ["jn"],
   casesensitive: false,
   channel: ["server"],
