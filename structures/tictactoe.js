@@ -12,6 +12,7 @@ module.exports = class Tictactoe extends Game {
     this.lastMessage = null;
   }
   async send() {
+    super.update();
     if (!this.turn) {
       let start = this.players[~~(Math.random() * this.players.length)];
       this.turn = start;
@@ -35,6 +36,7 @@ module.exports = class Tictactoe extends Game {
     this.state = 2;
   }
   start() {
+    super.update();
     this.send();
   }
   win(winner) {

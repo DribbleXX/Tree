@@ -6,6 +6,7 @@ const msg = require("./utilities/message.js");
 const user = require("./utilities/user.js");
 const secret = require("./secret.json");
 const Embed = require("./structures/embed.js");
+const Game = require("./structures/game.js");
 const pool = new pg.Pool({
   user: "postgres", //postgres role
   password: secret.dbpassword, //postgres role password
@@ -101,6 +102,20 @@ tree.client.on("ready", () => {
   tree.client.editStatus("online", {
     name: "@Tree info for info"
   });
+  setInterval(() => {
+    for (let entry of tree.games) {
+      let endedGames = entry[1].filter(game => game.lastUpdated + 45000 < Date.now());
+      let inactiveGames = entry[1].filter(game => !game.inactive && game.lastUpdated + 30000 < Date.now());
+      for (let i = 0; i < endedGames.length; i++) {
+        msg.create("`" + endedGames[i].name + "` ended for inactivity.", endedGames[i].channel);
+        Game.remove(endedGames[0]);
+      }
+      for (let i = 0; i < inactiveGames.length; i++) {
+        inactiveGames[i].inactive = true;
+        msg.create("`" + inactiveGames[i].name + "` is about to be ended for inactivity!", inactiveGames[i].channel);
+      }
+    }
+  }, 5000);
 });
 
 tree.client.on("messageCreate", async message => {
@@ -114,6 +129,7 @@ tree.client.on("messageCreate", async message => {
       if (tictactoe.players.filter(player => player.id === message.author.id)[0]) { //if the message sender is playing tic tac toe
         if (message.content.replace(/[ABC][1-3]/i, "").length === 0) {
           if (tictactoe.turn.id === message.author.id) { //if it's his turn
+            tictactoe.update();
             let indexes = message.content.replace(/A/i, "1").replace(/B/i, "2").replace(/C/i, "3");
             indexes = indexes.split("").map(i => i - 1);
             if (tictactoe.grid[indexes[1]][indexes[0]] !== "_") {

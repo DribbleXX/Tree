@@ -16,6 +16,7 @@ module.exports.run = (message, args, prefix) => {
     let game = availableGames[~~(Math.random() * availableGames.length)];
     if (game.players.map(p => p.id).indexOf(message.author.id) >= 0)
       return msg.create(new Embed("Whoops!", "You're already in that game, " + user.discrim(message.author) + "."), message.channel);
+    game.update();
     game.players.push(message.author);
     if (game.players.length === game.maxPlayers) {
       game.state = 1;

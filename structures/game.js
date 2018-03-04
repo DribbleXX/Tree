@@ -10,6 +10,8 @@ module.exports = class Game {
     this.players = [message.author];
     this.state = 0;
     this.channel = message.channel;
+    this.lastUpdated = Date.now();
+    this.inactive = false;
   }
   static async create(game) {
     if (!index.tree.games.get(game.channel.id))
@@ -23,5 +25,9 @@ module.exports = class Game {
   }
   static remove(game) {
     index.tree.games.get(game.channel.id).splice(index.tree.games.get(game.channel.id).indexOf(game), 1);
+  }
+  update() {
+    this.lastUpdated = Date.now();
+    this.inactive = false;
   }
 }
