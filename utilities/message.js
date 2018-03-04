@@ -19,7 +19,7 @@ module.exports = new class message {
         return await channel.createMessage({ embed: embedToSend });
       }else{
         let message = "__**" + embedToSend.title + "**__";
-        if (embededToSend.description) message = message + "\n" + embedToSend.description;
+        if (embedToSend.description) message = message + "\n" + embedToSend.description;
         if (embedToSend.fields) {
           for (let i = 0; i < embedToSend.fields.length; i++) {
             message = message + "\n**" + embedToSend.fields[i].name + "**";
