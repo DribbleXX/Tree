@@ -32,4 +32,7 @@ module.exports = new class string {
   startsWithVowel(string) {
     return ["a", "e", "i", "o", "u", "y"].indexOf(string[0].toLowerCase()) < 0 ? false : true;
   }
+  escape(string) {
+   return string.replace(/\*/g, "\\*").replace(/_/g, "\_").replace(/~/g, "\\~");
+  }
 }();
