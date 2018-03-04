@@ -35,7 +35,7 @@ module.exports.run = async (message, args) => {
     let embedMessage = {
       embed: new Embed(string.capitalize(command.help.name), command.help.description)
     }
-    if (command.help.usage) embedMessage.embed.addField("Command usage", "\`\`\`" + command.help.usage.join("\n") + "\`\`\`");
+    if (command.help.usage) embedMessage.embed.addField("Command usage", "\`\`\`" + prefix + command.help.usage.join("\n") + "\`\`\`");
     if (command.help.aliases || command.help.casesensitive || command.help.deleteresponse || command.help.dm || command.help.permission) {
       let extrainfo = [];
       if (command.help.aliases) extrainfo.push("Aliases: " +  command.help.aliases.map(a => "**" + a + "**").join(", "));
