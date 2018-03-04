@@ -214,7 +214,8 @@ tree.client.on("messageCreate", async message => {
     }
   }
   if (!requiredCommand.help.casesensitive) args = args.map(arg => arg.toLowerCase());
-  tree.alterGuildData(message.channel.guild.id, "commandcount", (await tree.getGuildData(message.channel.guild.id, "commandcount")).commandcount + 1);
+  if (!message.channel.type)
+    tree.alterGuildData(message.channel.guild.id, "commandcount", (await tree.getGuildData(message.channel.guild.id, "commandcount")).commandcount + 1);
   requiredCommand.run(message, args, prefix);
 });
 
