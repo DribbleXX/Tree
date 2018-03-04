@@ -18,11 +18,11 @@ module.exports = new class message {
       if (channel.type === 1 || channel.permissionsOf(index.tree.client.user.id).has("embedLinks")) {
         return await channel.createMessage({ embed: embedToSend });
       }else{
-        let message = "__**" + embedToSend.title + "**__";
+        let message = "__**" + embedToSend.title.replace(/\*/g, "").replace(/__/g, "") + "**__";
         if (embedToSend.description) message = message + "\n" + embedToSend.description;
         if (embedToSend.fields) {
           for (let i = 0; i < embedToSend.fields.length; i++) {
-            message = message + "\n**" + embedToSend.fields[i].name + "**";
+            message = message + "\n**" + embedToSend.fields[i].name.replace(/\*/g, "") + "**";
             message = message + "\n" + embedToSend.fields[i].value;
           }
         }
