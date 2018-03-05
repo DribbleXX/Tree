@@ -1,5 +1,5 @@
 # Tree
-Tree is a Discord bot that can be found on the [Superjombombo Community](discord.gg/sjb)
+Tree is a Discord bot that can be found on the [Superjombombo Community](https://discord.gg/sjb)
 
 ## Description
 Tree is a bot focused on entertainment and games with a few utility commands. Tree is constantly updated with new and interesting things to play around with!
